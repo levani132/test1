@@ -3,5 +3,5 @@ pipenv==2018.11.26
 psycopg2==2.8.4
 web.py==0.37
 Jinja2==2.6
-Werkzeug==0.8.3
+Werkzeug==0.15.3
 gunicorn==0.14.2
