@@ -7,7 +7,7 @@ def foo():
     data = {"test":23} #request.json
     return jsonify(data)
 
-app.run()
+app.run(port=80)
 
 
 #test = {"test_key":1000}
