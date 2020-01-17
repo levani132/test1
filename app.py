@@ -26,12 +26,12 @@ def submit():
 		columns = ('ID','MODEL')
 		temp = dato['ID']
 		cursor.execute("select * from mobile where id = (%s)", [temp])
-		#result = []
-		#for row in cursor.fetchone():
-		#	result.append(dict(zip(columns,row)))
-		sel = cursor.fetchone()
+		result = []
+		for row in cursor.fetchone():
+			result.append(dict(zip(columns,row)))
+		#sel = cursor.fetchone()
 		#zaza = json.dumps(sel)
-		return json.dumps(sel)
+		return json.dumps(result[0])
 
 if __name__ == '__main__':
 	port = int(os.environ.get('PORT', 5000))
