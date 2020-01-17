@@ -35,5 +35,5 @@ def submit():
 
 if __name__ == '__main__':
 	port = int(os.environ.get('PORT', 5000))
-	my_port = '0.0.0.0:' + str(port)
-	app.run(host=my_port)
+	my_port = str(port)
+	app.run(host='0.0.0.0', port=my_port)
