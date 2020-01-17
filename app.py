@@ -27,7 +27,7 @@ def submit():
 		temp = dato['ID']
 		cursor.execute("select * from mobile where id = (%s)", [temp])
 		result = []
-		for row in cursor.fetchone():
+		for row in cursor.fetchall():
 			result.append(dict(zip(columns,row)))
 		#sel = cursor.fetchone()
 		#zaza = json.dumps(sel)
