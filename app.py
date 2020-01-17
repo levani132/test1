@@ -34,4 +34,6 @@ def submit():
 		return json.dumps(result, indent=2)
 
 if __name__ == '__main__':
-	app.run(debug=True)
+	port = int(os.environ.get('PORT', 5000))
+	my_port = '0.0.0.0:' + str(port)
+	app.run(host=my_port)
