@@ -4,8 +4,8 @@ import psycopg2
 import os
 
 app = Flask(__name__)
-os.getenv(PORT,'8800')
-os.getenv(IP, '0.0.0.0')
+#os.getenv(PORT,'8800')
+#os.getenv(IP, '0.0.0.0')
 @app.route('/submit', methods = ['POST'])
 def submit():
 	v_res= [{"a": 1, "b": 2}, {"a": 4, "b": 6}]
