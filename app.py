@@ -32,4 +32,4 @@ def submit():
 		return json.dumps(result, indent=2)
 
 if __name__ == '__main__':
-	app.run()
+	app.run(port=8800)
