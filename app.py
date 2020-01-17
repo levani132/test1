@@ -8,9 +8,9 @@ app = Flask(__name__)
 #os.getenv(IP, '0.0.0.0')
 @app.route('/submit', methods = ['POST'])
 def submit():
-	v_res= [{"a": 1, "b": 2}, {"a": 4, "b": 6}]
 	if request.method == 'POST':
 		dato = request.json
+		print('dato', dato)
 		print(dato['ID'])
 		##print(type(dato))
 		connection = psycopg2.connect(user = "vukyhtaqmatqpj",
