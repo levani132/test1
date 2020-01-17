@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request, jsonify
 import json
 import psycopg2
+import os
 
 app = Flask(__name__)
-
+os.getenv(PORT,'8080')
+os.getenv(IP, '0.0.0.0')
 @app.route('/submit', methods = ['POST'])
 def submit():
 	v_res= [{"a": 1, "b": 2}, {"a": 4, "b": 6}]
@@ -32,4 +34,4 @@ def submit():
 		return json.dumps(result, indent=2)
 
 if __name__ == '__main__':
-	app.run(port=8800)
+	app.run()
