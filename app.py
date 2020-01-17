@@ -4,7 +4,7 @@ import psycopg2
 import os
 
 app = Flask(__name__)
-os.getenv(PORT,'8080')
+os.getenv(PORT,'8800')
 os.getenv(IP, '0.0.0.0')
 @app.route('/submit', methods = ['POST'])
 def submit():
@@ -34,4 +34,4 @@ def submit():
 		return json.dumps(result, indent=2)
 
 if __name__ == '__main__':
-	app.run()
+	app.run(debug=True)
