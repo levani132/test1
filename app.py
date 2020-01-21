@@ -2,6 +2,10 @@ from flask import Flask, render_template, request, jsonify
 import json
 import psycopg2
 import os
+import pytesseract
+from PIL import Image
+
+pytesseract.pytesseract.tesseract_cmd = '/app/.apt/usr/bin/tesseract'
 
 app = Flask(__name__)
 #os.getenv(PORT,'8800')
