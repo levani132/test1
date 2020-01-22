@@ -55,10 +55,11 @@ def auth():
 		errorCode = ''
 		if sel == []:
 			errorCode = 'Phone number is not registered.'
-		encoded = jwt.encode({'phoneNumber': sel[0], 'endDate':str(date.today())}, key, algorithm='HS256')
-		print(str(encoded))
+			encoded = ''
+		else:		
+			encoded = jwt.encode({'phoneNumber': sel[0], 'endDate':str(date.today())}, key, algorithm='HS256').decode("utf-8")
 		cols = ('token','errorCode')
-		rows = (encoded.decode("utf-8"),errorCode)
+		rows = (encoded,errorCode)
 		result = []
 		result.append(dict(zip(cols,rows))) 
 		return json.dumps(result[0])
