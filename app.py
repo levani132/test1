@@ -6,7 +6,7 @@ import pytesseract
 from PIL import Image
 
 pytesseract.pytesseract.tesseract_cmd = '/app/.apt/usr/bin/tesseract'
-
+key = 'parting'
 app = Flask(__name__)
 #os.getenv(PORT,'8800')
 #os.getenv(IP, '0.0.0.0')
