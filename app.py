@@ -101,7 +101,45 @@ def getLoginStatus():
 		result.append(dict(zip(cols,rows)))
 		return json.dumps(result[0]) 
 
-
+@app.route('/register', methods = ['POST'])
+def register():
+    errorText = None
+    try:        
+        dato = request.json
+        connection = psycopg2.connect(user = "vukyhtaqmatqpj",
+                                    password = "2cf5b5c6b3b7d7e99f02ddc474088225a0015c93996b515194872873f96f65b4",
+                                    host = "ec2-54-228-237-40.eu-west-1.compute.amazonaws.com",
+                                    port = "5432",
+                                    database = "dedn9b8htmngg7")
+        cursor = connection.cursor()
+        text = "select 1 from parking.users where phone_number = (%s);"
+        cursor.execute(text,[dato['phoneNumber']])
+        zaza = cursor.fetchone()
+        if zaza != None:
+            raise NameError('ტელეფონის ნომერი დარეგისტრირებულია')
+        text = "select 1 from parking.cars where car_number = (%s);"
+        cursor.execute(text,[dato['carNumber']])
+        zaza = cursor.fetchone()
+        if zaza != None:
+            raise NameError('მანქანის ნომერი დარეგისტრირებულია')
+        
+        text  = '''INSERT INTO parking.users (name,phone_number) VALUES ((%s), (%s));'''
+        cursor.execute(text,[dato['name'],dato['phoneNumber']])
+        #connection.commit()
+        text = "select id from parking.users where phone_number = (%s);"
+        cursor.execute(text, [dato['phoneNumber']])
+        userId = cursor.fetchone()
+        text = '''INSERT INTO parking.cars (user_id,car_number) VALUES ((%s), (%s));'''
+        cursor.execute(text,[userId[0],dato['carNumber']])
+        connection.commit()
+        print(userId[0],dato['carNumber'])
+    except Exception as e:
+        errorText = str(e)
+    finally:
+        cursor.close()
+        connection.close()
+        #print(cursor.fetchall())
+        return json.dumps({'error': errorText})
 
 
 if __name__ == '__main__':
