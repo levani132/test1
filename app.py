@@ -21,8 +21,8 @@ def loginRequired(f):
 	def decoratedFunction(*args, **kwargs):
 		try:
 			decoded = jwt.decode(request.headers.get('Authorization'), key, algorithms='HS256')
-			datetime = datetime.strptime(decoded['endDate'], '%b %d %Y %I:%M%p')
-			if (datetime + timedelta(days=30)) < datetime.today():
+			datetimeObject = datetime.strptime(decoded['endDate'], '%b %d %Y %I:%M%p')
+			if (datetimeObject + timedelta(days=30)) < datetime.today():
 				raise NameError('Token expired!')
 			return f(*args, **kwargs)
 		except Exception as e:
