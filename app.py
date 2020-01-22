@@ -122,7 +122,6 @@ def register():
         zaza = cursor.fetchone()
         if zaza != None:
             raise NameError('მანქანის ნომერი დარეგისტრირებულია')
-        
         text  = '''INSERT INTO parking.users (name,phone_number) VALUES ((%s), (%s));'''
         cursor.execute(text,[dato['name'],dato['phoneNumber']])
         #connection.commit()
@@ -132,14 +131,17 @@ def register():
         text = '''INSERT INTO parking.cars (user_id,car_number) VALUES ((%s), (%s));'''
         cursor.execute(text,[userId[0],dato['carNumber']])
         connection.commit()
-        print(userId[0],dato['carNumber'])
+        encoded = jwt.encode({'phoneNumber': dato['phoneNumber'], 'endDate':str(datetime.today())}, key, algorithm='HS256').decode("utf-8")
     except Exception as e:
         errorText = str(e)
     finally:
         cursor.close()
         connection.close()
-        #print(cursor.fetchall())
-        return json.dumps({'error': errorText})
+		cols = ('token','error')
+		rows = (encoded,errorText)
+		result = []
+		result.append(dict(zip(cols,rows))) 
+		return json.dumps(result[0])
 
 
 if __name__ == '__main__':
