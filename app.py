@@ -104,6 +104,7 @@ def getLoginStatus():
 @app.route('/register', methods = ['POST'])
 def register():
     errorText = None
+	encoded = ''
     try:        
         dato = request.json
         connection = psycopg2.connect(user = "vukyhtaqmatqpj",
