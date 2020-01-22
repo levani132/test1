@@ -4,6 +4,7 @@ import psycopg2
 import os
 import pytesseract
 from PIL import Image
+import jwt
 
 pytesseract.pytesseract.tesseract_cmd = '/app/.apt/usr/bin/tesseract'
 key = 'parting'
