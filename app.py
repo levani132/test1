@@ -26,7 +26,11 @@ def loginRequired(f):
 				raise NameError('Token expired!')
 			return f(*args, **kwargs)
 		except Exception as e:
-			return json.dumps(str(e))
+			cols = ('error',)
+			rows = (e,)
+			result = []
+			result.append(dict(zip(cols,rows)))
+			return json.dumps(result[0])
 	return decoratedFunction
 
 
