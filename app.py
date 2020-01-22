@@ -5,6 +5,7 @@ import os
 import pytesseract
 from PIL import Image
 import jwt
+from datetime import date
 
 pytesseract.pytesseract.tesseract_cmd = '/app/.apt/usr/bin/tesseract'
 key = 'parting'
