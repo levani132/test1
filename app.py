@@ -54,16 +54,21 @@ def auth():
 		sel = cursor.fetchall()
 		errorCode = ''
 		if sel == []:
-			errorCode = 'Phone number is not registered.'
+			errorCode = 'ნომერი არ არის რეგისტრირებული.'
 			encoded = ''
 		else:		
 			encoded = jwt.encode({'phoneNumber': sel[0], 'endDate':str(date.today())}, key, algorithm='HS256').decode("utf-8")
-		cols = ('token','errorCode')
+		cols = ('token','error')
 		rows = (encoded,errorCode)
 		result = []
 		result.append(dict(zip(cols,rows))) 
 		return json.dumps(result[0])
-	
+@app.route('/getLoginStatus', methods = ['POST'])
+def getLoginStatus():
+	if request.method == 'POST':
+		dato = request.json
+
+
 if __name__ == '__main__':
 	port = int(os.environ.get('PORT', 5000))
 	my_port = str(port)
