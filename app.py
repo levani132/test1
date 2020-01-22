@@ -54,7 +54,7 @@ def auth():
 		sel = cursor.fetchall()
 		errorCode = ''
 		if sel == []:
-			errorCode = "Phone number is not registered."
+			errorCode = 'Phone number is not registered.'
 		encoded = jwt.encode({'phoneNumber': sel[0], 'endDate':str(date.today())}, key, algorithm='HS256')
 		print(str(encoded))
 		cols = ('token','errorCode')
