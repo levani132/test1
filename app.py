@@ -5,13 +5,35 @@ import os
 import pytesseract
 from PIL import Image
 import jwt
-from datetime import date
+from datetime import datetime, timedelta
+from functools import wraps
+
+
+
+
+
 
 pytesseract.pytesseract.tesseract_cmd = '/app/.apt/usr/bin/tesseract'
 key = 'parting'
+
+def loginRequired(f):
+	@wraps(f)
+	def decoratedFunction(*args, **kwargs):
+		try:
+			decoded = jwt.decode(request.headers.get('Authorization'), key, algorithms='HS256')
+			datetime = datetime.strptime(decoded['endDate'], '%b %d %Y %I:%M%p')
+			if (datetime + timedelta(days=30)) < datetime.today():
+				raise NameError('Token expired!')
+			return f(*args, **kwargs)
+		except Exception as e:
+			return json.dumps(str(e))
+	return decoratedFunction
+
+
 app = Flask(__name__)
 #os.getenv(PORT,'8800')
 #os.getenv(IP, '0.0.0.0')
+
 @app.route('/submit', methods = ['POST'])
 def submit():
 	if request.method == 'POST':
@@ -38,6 +60,7 @@ def submit():
 		#sel = cursor.fetchone()
 		#zaza = json.dumps(sel)
 		return json.dumps(result[0])
+
 @app.route('/auth', methods = ['POST'])
 def auth():
 	if request.method == 'POST':
@@ -57,16 +80,24 @@ def auth():
 			errorCode = 'ნომერი არ არის რეგისტრირებული.'
 			encoded = ''
 		else:		
-			encoded = jwt.encode({'phoneNumber': sel[0], 'endDate':str(date.today())}, key, algorithm='HS256').decode("utf-8")
+			encoded = jwt.encode({'phoneNumber': sel[0], 'endDate':str(datetime.today())}, key, algorithm='HS256').decode("utf-8")
 		cols = ('token','error')
 		rows = (encoded,errorCode)
 		result = []
 		result.append(dict(zip(cols,rows))) 
 		return json.dumps(result[0])
+
 @app.route('/getLoginStatus', methods = ['POST'])
+@loginRequired
 def getLoginStatus():
 	if request.method == 'POST':
-		dato = request.json
+		cols = ('isAuthenticated',)
+		rows = (True,)
+		result = []
+		result.append(dict(zip(cols,rows)))
+		return json.dumps(result[0]) 
+
+
 
 
 if __name__ == '__main__':
