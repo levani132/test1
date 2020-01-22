@@ -27,7 +27,7 @@ def loginRequired(f):
 			return f(*args, **kwargs)
 		except Exception as e:
 			cols = ('error',)
-			rows = (e,)
+			rows = (str(e),)
 			result = []
 			result.append(dict(zip(cols,rows)))
 			return json.dumps(result[0])
