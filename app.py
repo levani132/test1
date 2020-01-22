@@ -9,7 +9,6 @@ from datetime import date
 
 pytesseract.pytesseract.tesseract_cmd = '/app/.apt/usr/bin/tesseract'
 key = 'parting'
-errorCode = ""
 app = Flask(__name__)
 #os.getenv(PORT,'8800')
 #os.getenv(IP, '0.0.0.0')
@@ -53,6 +52,7 @@ def auth():
 		text = 'select phone_number from parking.users where phone_number = (%s);'
 		cursor.execute(text, [dato['phoneNumber']])
 		sel = cursor.fetchall()
+		errorCode = ''
 		if sel == []:
 			errorCode = "Phone number is not registered."
 		encoded = jwt.encode({'phoneNumber': sel[0], 'endDate':str(date.today())}, key, algorithm='HS256')
