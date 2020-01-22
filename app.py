@@ -137,11 +137,11 @@ def register():
     finally:
         cursor.close()
         connection.close()
-		cols = ('token','error')
-		rows = (encoded,errorText)
-		result = []
-		result.append(dict(zip(cols,rows))) 
-		return json.dumps(result[0])
+        cols = ('token','error')
+        rows = (encoded,errorText)
+        result = []
+        result.append(dict(zip(cols,rows))) 
+        return json.dumps(result[0])
 
 
 if __name__ == '__main__':
