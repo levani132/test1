@@ -158,7 +158,7 @@ def register():
         return json.dumps(result[0])
 
 @app.route('/scan', methods = ['POST'])
-@loginRequired
+#@loginRequired
 def scan():
     if request.method == 'POST':
         data = request.json
