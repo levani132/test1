@@ -8,7 +8,7 @@ import jwt
 from datetime import datetime, timedelta
 from functools import wraps
 
-# import cv2
+import cv2
 import pytesseract
 import re
 import base64
