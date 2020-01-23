@@ -164,9 +164,9 @@ def scan():
         text = pytesseract.image_to_string(im)
         p = re.compile('.*([A-Z][A-Z]-[0-9][0-9][0-9]-[A-Z][A-Z])(.*)')
         m = p.match(text)
-		file1 = open("/app/log.txt","w")
-		file1.write( text +"\n"+m)
-		file1.close()
+		# file1 = open("/app/log.txt","w")
+		# file1.write( text +"\n"+m)
+		# file1.close()
         return(json.dumps({ 'text': text }))
 
 @app.route('/search', methods = ['POST'])
