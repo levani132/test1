@@ -191,7 +191,8 @@ def search():
         cursor.close()
         connection.close()
         #print(cursor.fetchall())
-        return json.dumps({'name':zaza[0],'phoneNumber':zaza[1],'error': errorText})
+        return (json.dumps({'name':zaza[0],'phoneNumber':zaza[1],'error': errorText}))
+        
 if __name__ == '__main__':
 	port = int(os.environ.get('PORT', 5000))
 	my_port = str(port)
