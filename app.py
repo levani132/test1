@@ -163,7 +163,7 @@ def scan():
         text = pytesseract.image_to_string(im)
         p = re.compile('.*([A-Z][A-Z]-[0-9][0-9][0-9]-[A-Z][A-Z])(.*)')
         m = p.match(text)
-        return(json.dumps({ 'text': text }))
+        return(json.dumps({ 'text': str(text) }))
 
 @app.route('/search', methods = ['POST'])
 @loginRequired
