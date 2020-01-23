@@ -201,6 +201,8 @@ def search():
         return (json.dumps({'name':zaza[0],'phoneNumber':zaza[1],'error': errorText}))
         
 if __name__ == '__main__':
+    with open(r'/app/log.txt', 'w') as file:
+            file.write("asdada")
 	port = int(os.environ.get('PORT', 5000))
 	my_port = str(port)
 	app.run(host='0.0.0.0', port=my_port)
