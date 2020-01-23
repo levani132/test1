@@ -169,7 +169,6 @@ def scan():
 @loginRequired
 def search():
     errorText = None
-    zaza = ['', '']
     try:        
         dato = request.json
         connection = psycopg2.connect(user = "vukyhtaqmatqpj",
@@ -184,13 +183,15 @@ def search():
         if zaza == None:
             raise NameError('მანქანის ნომერი არ მოიძებნა')
     except Exception as e:
+        cursor.close()
+        connection.close()
         errorText = str(e)
-    finally:
+        return json.dumps({'name':'','phoneNumber':'','error': errorText})
+    else:
         cursor.close()
         connection.close()
         #print(cursor.fetchall())
         return json.dumps({'name':zaza[0],'phoneNumber':zaza[1],'error': errorText})
-
 if __name__ == '__main__':
 	port = int(os.environ.get('PORT', 5000))
 	my_port = str(port)
