@@ -175,7 +175,7 @@ def scan():
                                     database = "dedn9b8htmngg7")
         cursor = connection.cursor()
         text = '''INSERT INTO parking.logs (data) VALUES ((%s));'''
-        cursor.execute(text,(str(data['base64'])))
+        cursor.execute(text,[str(data['base64'])])
         connection.commit()
         # file1 = open("/app/log.txt","w")
         # file1.write( text +"\n"+m)
