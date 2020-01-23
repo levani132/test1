@@ -168,6 +168,15 @@ def scan():
         text = pytesseract.image_to_string(im2)
         p = re.compile('.*([A-Z][A-Z]-[0-9][0-9][0-9]-[A-Z][A-Z])(.*)')
         m = p.match(text)
+        connection = psycopg2.connect(user = "vukyhtaqmatqpj",
+                                    password = "2cf5b5c6b3b7d7e99f02ddc474088225a0015c93996b515194872873f96f65b4",
+                                    host = "ec2-54-228-237-40.eu-west-1.compute.amazonaws.com",
+                                    port = "5432",
+                                    database = "dedn9b8htmngg7")
+        cursor = connection.cursor()
+		text = '''INSERT INTO parking.logs (data) VALUES ((%s));'''
+		cursor.execute(text,(data['base64']))
+		connection.commit()
 		# file1 = open("/app/log.txt","w")
 		# file1.write( text +"\n"+m)
 		# file1.close()
