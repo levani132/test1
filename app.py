@@ -8,7 +8,16 @@ import jwt
 from datetime import datetime, timedelta
 from functools import wraps
 
-
+import cv2
+import pytesseract
+import re
+import base64
+from PIL import Image
+from io import BytesIO
+from flask import Flask, render_template, request, jsonify
+import json
+import psycopg2
+import os
 
 
 
@@ -144,6 +153,16 @@ def register():
         result.append(dict(zip(cols,rows))) 
         return json.dumps(result[0])
 
+@app.route('/scan', methods = ['POST'])
+@loginRequired
+def scan():
+    if request.method == 'POST':
+        data = request.json
+        im = Image.open(BytesIO(base64.b64decode(data['base64'])))
+        text = pytesseract.image_to_string(im)
+        p = re.compile('.*([A-Z][A-Z]-[0-9][0-9][0-9]-[A-Z][A-Z])(.*)')
+        m = p.match(text)
+        return(json.dumps({ 'text': text }))
 
 if __name__ == '__main__':
 	port = int(os.environ.get('PORT', 5000))
