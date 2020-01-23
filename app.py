@@ -163,7 +163,9 @@ def scan():
     if request.method == 'POST':
         data = request.json
         im = Image.open(BytesIO(base64.b64decode(data['base64'])))
-        text = pytesseract.image_to_string(im)
+        x,y = im.size
+        im2 = im.crop((int(x/2-3*x/8), int(y/2-3*x/32), int(x/2+3*x/8), int(y/2+3*x/32)))
+        text = pytesseract.image_to_string(im2)
         p = re.compile('.*([A-Z][A-Z]-[0-9][0-9][0-9]-[A-Z][A-Z])(.*)')
         m = p.match(text)
 		# file1 = open("/app/log.txt","w")
