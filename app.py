@@ -171,6 +171,7 @@ def scan():
 		# file1 = open("/app/log.txt","w")
 		# file1.write( text +"\n"+m)
 		# file1.close()
+        print(im2)
         with open('/app/log.txt', 'w') as file:
             file.write(text+"-text \n")
             file.write("asdada")
