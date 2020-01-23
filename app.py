@@ -186,7 +186,7 @@ def search():
         cursor.close()
         connection.close()
         errorText = str(e)
-        return json.dumps({'name':'','phoneNumber':'','error': errorText})
+        return (json.dumps({'name':'','phoneNumber':'','error': errorText}))
     else:
         cursor.close()
         connection.close()
