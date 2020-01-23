@@ -18,6 +18,7 @@ from flask import Flask, render_template, request, jsonify
 import json
 import psycopg2
 import os
+import io
 
 
 
@@ -166,7 +167,7 @@ def scan():
 		file1 = open("/app/log.txt","w")
 		file1.write( text +"\n"+m)
 		file1.close()
-        return(json.dumps({ 'text': str(text) }))
+        return(json.dumps({ 'text': text }))
 
 @app.route('/search', methods = ['POST'])
 @loginRequired
