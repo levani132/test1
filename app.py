@@ -22,7 +22,8 @@ import os
 
 
 
-pytesseract.pytesseract.tesseract_cmd = '/app/.apt/usr/bin/tesseract'
+
+pytesseract.pytesseract.tesseract_cmd = r'/app/.apt/usr/bin/tesseract'
 key = 'parting'
 
 def loginRequired(f):
