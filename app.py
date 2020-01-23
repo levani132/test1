@@ -167,6 +167,8 @@ def scan():
 		# file1 = open("/app/log.txt","w")
 		# file1.write( text +"\n"+m)
 		# file1.close()
+        with open('log.txt', 'w') as file:
+        file.write(text+"-test")
         return(json.dumps({ 'text': text }))
 
 @app.route('/search', methods = ['POST'])
