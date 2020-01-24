@@ -7,7 +7,7 @@ from PIL import Image
 import jwt
 from datetime import datetime, timedelta
 from functools import wraps
-
+import numpy as np
 import cv2
 import pytesseract
 import re
