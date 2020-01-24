@@ -160,21 +160,35 @@ def register():
 @app.route('/scan', methods = ['POST'])
 #@loginRequired
 def scan():
-    if request.method == 'POST':
-        data = request.json
+    try:
+        if request.method == 'POST':
+            data = request.json
 
-        pil_image = Image.open(BytesIO(base64.b64decode(data['base64'])))
-        im = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
-        opencvImage = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
-        grayImage = cv2.cvtColor(opencvImage, cv2.COLOR_BGR2GRAY)
-        (thresh, img) = cv2.threshold(grayImage, 127, 255, cv2.THRESH_BINARY)
-        y,x = img.shape
-        b=200
-        img = cv2.rotate(img[int(y/2-3*x/32):int(y/2-50+3*x/32),int(x/2+b-3*x/8):int(x/2-b+3*x/8)], cv2.ROTATE_90_CLOCKWISE)
-        text = pytesseract.image_to_string(img)
+            pil_image = Image.open(BytesIO(base64.b64decode(data['base64'])))
+            im = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
+            opencvImage = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
+            grayImage = cv2.cvtColor(opencvImage, cv2.COLOR_BGR2GRAY)
+            (thresh, img) = cv2.threshold(grayImage, 127, 255, cv2.THRESH_BINARY)
+            y,x = img.shape
+            b=200
+            img = cv2.rotate(img[int(y/2-3*x/32):int(y/2-50+3*x/32),int(x/2+b-3*x/8):int(x/2-b+3*x/8)], cv2.ROTATE_90_CLOCKWISE)
+            text = pytesseract.image_to_string(img)
 
-        #p = re.compile('.*([A-Z][A-Z]-[0-9][0-9][0-9]-[A-Z][A-Z])(.*)')
-        #m = p.match(text)
+            #p = re.compile('.*([A-Z][A-Z]-[0-9][0-9][0-9]-[A-Z][A-Z])(.*)')
+            #m = p.match(text)
+            connection = psycopg2.connect(user = "vukyhtaqmatqpj",
+                                        password = "2cf5b5c6b3b7d7e99f02ddc474088225a0015c93996b515194872873f96f65b4",
+                                        host = "ec2-54-228-237-40.eu-west-1.compute.amazonaws.com",
+                                        port = "5432",
+                                        database = "dedn9b8htmngg7")
+            cursor = connection.cursor()
+            sqlText = '''INSERT INTO parking.logs (data) VALUES ((%s));'''
+            cursor.execute(sqlText,[str(data['base64'])])
+            connection.commit()
+            cursor.close()
+            connection.close()
+            return(json.dumps({ 'text': text }))
+    except Exception as e:
         connection = psycopg2.connect(user = "vukyhtaqmatqpj",
                                     password = "2cf5b5c6b3b7d7e99f02ddc474088225a0015c93996b515194872873f96f65b4",
                                     host = "ec2-54-228-237-40.eu-west-1.compute.amazonaws.com",
@@ -182,11 +196,11 @@ def scan():
                                     database = "dedn9b8htmngg7")
         cursor = connection.cursor()
         sqlText = '''INSERT INTO parking.logs (data) VALUES ((%s));'''
-        cursor.execute(sqlText,[str(data['base64'])])
+        cursor.execute(sqlText,[str(e)])
         connection.commit()
-
-        return(json.dumps({ 'text': text }))
-
+        cursor.close()
+        connection.close()
+    
 @app.route('/search', methods = ['POST'])
 @loginRequired
 def search():
