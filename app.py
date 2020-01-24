@@ -179,7 +179,7 @@ def scan():
             image = vision.types.Image(content=content)
             response = client.text_detection(image=image)
 
-            texts = [t.description in response.text_annotations]
+            texts = [t.description in for t in response.text_annotations]
             p = re.compile('.*([A-Z][A-Z]-[0-9][0-9][0-9]-[A-Z][A-Z])(.*)')
             text = filter(lambda text: p.fullmatch(text))[0]
             # pil_image = Image.open(BytesIO())
