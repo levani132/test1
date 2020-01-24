@@ -174,7 +174,7 @@ def scan():
         if request.method == 'POST':
             data = request.json
 
-            pil_image = Image.open(BytesIO(base64.b64decode(data['base64'].split('\n').join(''))))
+            pil_image = Image.open(BytesIO(base64.b64decode(data['base64'].replace('\n', ''))))
             im = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
             opencvImage = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
             grayImage = cv2.cvtColor(opencvImage, cv2.COLOR_BGR2GRAY)
