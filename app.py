@@ -21,9 +21,19 @@ import os
 import io
 
 
-with open('/app/log.txt', 'w') as file:
-        file.write("-text \n")
-        file.write("asdada")
+
+def log(msg):
+    connection = psycopg2.connect(user = "vukyhtaqmatqpj",
+                                password = "2cf5b5c6b3b7d7e99f02ddc474088225a0015c93996b515194872873f96f65b4",
+                                host = "ec2-54-228-237-40.eu-west-1.compute.amazonaws.com",
+                                port = "5432",
+                                database = "dedn9b8htmngg7")
+    cursor = connection.cursor()
+    sqlText = '''INSERT INTO parking.logs (data) VALUES ((%s));'''
+    cursor.execute(sqlText,[str(msg)])
+    connection.commit()
+    cursor.close()
+    connection.close()
 
 
 pytesseract.pytesseract.tesseract_cmd = r'/app/.apt/usr/bin/tesseract'
@@ -164,7 +174,7 @@ def scan():
         if request.method == 'POST':
             data = request.json
 
-            pil_image = Image.open(BytesIO(base64.b64decode(data['base64'])))
+            pil_image = Image.open(BytesIO(base64.b64decode(data['base64'].split('\n').join(''))))
             im = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
             opencvImage = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
             grayImage = cv2.cvtColor(opencvImage, cv2.COLOR_BGR2GRAY)
@@ -200,6 +210,7 @@ def scan():
         connection.commit()
         cursor.close()
         connection.close()
+        return(json.dumps({"error":str(e)}))
     
 @app.route('/search', methods = ['POST'])
 @loginRequired
