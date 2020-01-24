@@ -162,10 +162,17 @@ def register():
 def scan():
     if request.method == 'POST':
         data = request.json
-        im = Image.open(BytesIO(base64.b64decode(data['base64'])))
-        x,y = im.size
-        im2 = im.crop((int(x/2-3*x/8), int(y/2-3*x/32), int(x/2+3*x/8), int(y/2+3*x/32)))
-        text = pytesseract.image_to_string(im2)
+
+        pil_image = Image.open(BytesIO(base64.b64decode(data['base64'])))
+        im = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
+        opencvImage = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
+        grayImage = cv2.cvtColor(opencvImage, cv2.COLOR_BGR2GRAY)
+        (thresh, img) = cv2.threshold(grayImage, 127, 255, cv2.THRESH_BINARY)
+        y,x = img.shape
+        b=200
+        img = cv2.rotate(img[int(y/2-3*x/32):int(y/2-50+3*x/32),int(x/2+b-3*x/8):int(x/2-b+3*x/8)], cv2.ROTATE_90_CLOCKWISE)
+        text = pytesseract.image_to_string(img)
+
         p = re.compile('.*([A-Z][A-Z]-[0-9][0-9][0-9]-[A-Z][A-Z])(.*)')
         m = p.match(text)
         connection = psycopg2.connect(user = "vukyhtaqmatqpj",
@@ -177,10 +184,6 @@ def scan():
         sqlText = '''INSERT INTO parking.logs (data) VALUES ((%s));'''
         cursor.execute(sqlText,[str(data['base64'])])
         connection.commit()
-        # file1 = open("/app/log.txt","w")
-        # file1.write( text +"\n"+m)
-        # file1.close()
-        print(im2)
         with open('/app/log.txt', 'w') as file:
             file.write(text+"-text \n")
             file.write("asdada")
