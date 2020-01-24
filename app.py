@@ -173,8 +173,8 @@ def scan():
         img = cv2.rotate(img[int(y/2-3*x/32):int(y/2-50+3*x/32),int(x/2+b-3*x/8):int(x/2-b+3*x/8)], cv2.ROTATE_90_CLOCKWISE)
         text = pytesseract.image_to_string(img)
 
-        p = re.compile('.*([A-Z][A-Z]-[0-9][0-9][0-9]-[A-Z][A-Z])(.*)')
-        m = p.match(text)
+        #p = re.compile('.*([A-Z][A-Z]-[0-9][0-9][0-9]-[A-Z][A-Z])(.*)')
+        #m = p.match(text)
         connection = psycopg2.connect(user = "vukyhtaqmatqpj",
                                     password = "2cf5b5c6b3b7d7e99f02ddc474088225a0015c93996b515194872873f96f65b4",
                                     host = "ec2-54-228-237-40.eu-west-1.compute.amazonaws.com",
@@ -184,9 +184,7 @@ def scan():
         sqlText = '''INSERT INTO parking.logs (data) VALUES ((%s));'''
         cursor.execute(sqlText,[str(data['base64'])])
         connection.commit()
-        with open('/app/log.txt', 'w') as file:
-            file.write(text+"-text \n")
-            file.write("asdada")
+
         return(json.dumps({ 'text': text }))
 
 @app.route('/search', methods = ['POST'])
