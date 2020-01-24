@@ -6,3 +6,4 @@ pyjwt==1.7.1
 opencv-python==4.1.2.30
 gunicorn==19.5.0
 Werkzeug==0.15.3
+google-cloud-vision==0.41.0

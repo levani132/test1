@@ -20,6 +20,8 @@ import psycopg2
 import os
 import io
 
+from google.cloud import vision
+client = vision.ImageAnnotatorClient()
 
 
 def log(msg):
@@ -173,16 +175,22 @@ def scan():
     try:
         if request.method == 'POST':
             data = request.json
+            content = base64.b64decode(data['base64'].replace('\n', ''))
+            image = vision.types.Image(content=content)
+            response = client.text_detection(image=image)
 
-            pil_image = Image.open(BytesIO(base64.b64decode(data['base64'].replace('\n', ''))))
-            im = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
-            opencvImage = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
-            grayImage = cv2.cvtColor(opencvImage, cv2.COLOR_BGR2GRAY)
-            (thresh, img) = cv2.threshold(grayImage, 127, 255, cv2.THRESH_BINARY)
-            y,x = img.shape
-            b=200
-            img = cv2.rotate(img[int(y/2-3*x/32):int(y/2-50+3*x/32),int(x/2+b-3*x/8):int(x/2-b+3*x/8)], cv2.ROTATE_90_CLOCKWISE)
-            text = pytesseract.image_to_string(img)
+            texts = [t.description in response.text_annotations]
+            p = re.compile('.*([A-Z][A-Z]-[0-9][0-9][0-9]-[A-Z][A-Z])(.*)')
+            text = filter(lambda text: p.fullmatch(text))[0]
+            # pil_image = Image.open(BytesIO())
+            # im = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
+            # opencvImage = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
+            # grayImage = cv2.cvtColor(opencvImage, cv2.COLOR_BGR2GRAY)
+            # (thresh, img) = cv2.threshold(grayImage, 127, 255, cv2.THRESH_BINARY)
+            # y,x = img.shape
+            # b=200
+            # img = cv2.rotate(img[int(y/2-3*x/32):int(y/2-50+3*x/32),int(x/2+b-3*x/8):int(x/2-b+3*x/8)], cv2.ROTATE_90_CLOCKWISE)
+            # text = pytesseract.image_to_string(img)
 
             #p = re.compile('.*([A-Z][A-Z]-[0-9][0-9][0-9]-[A-Z][A-Z])(.*)')
             #m = p.match(text)
